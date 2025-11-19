@@ -1,1 +1,9 @@
+<<<<<<< HEAD
 .venv
+=======
+.venv
+datasets/
+
+!datasets/utils
+!datasets/utils/main.py
+>>>>>>> b7fa14d (Remove useless folders and update gitignore)
