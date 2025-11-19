@@ -11,7 +11,7 @@ tickers_list = ["AAPL","MSFT","GOOGL","AMZN","NVDA","TSLA","META","AVGO","JPM","
 start_date = "2010-01-01"
 end_date = datetime.date.today().strftime('%Y-%m-%d')
 
-print("\n--- Téléchargement ---")
+print("\n--- Download ---")
 
 all_data = yf.download(tickers_list, start=start_date, end=end_date, auto_adjust=True)
 
@@ -28,8 +28,5 @@ volume_filepath = os.path.join(output_dir,"marketData","volume.csv")
 adj_close_data.to_csv(close_filepath)
 volume_data.to_csv(volume_filepath)
 
-print(f"✅ Données 'Adj Close' enregistrées dans {close_filepath}")
-print(f"✅ Données 'Volume' enregistrées dans {volume_filepath}")
-
-print("\n--- Aperçu des données de clôture (adj_close_prices.csv) ---")
-print(adj_close_data.tail()) 
+print(f"Data 'Adj Close' saved in {close_filepath}")
+print(f"Data 'Volume' saved in {volume_filepath}")
