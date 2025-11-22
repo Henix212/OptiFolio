@@ -9,7 +9,7 @@ os.makedirs(os.path.join(output_dir,"marketData"), exist_ok=True)
 
 tickers_list = ["AAPL","MSFT","GOOGL","AMZN","NVDA","META","AVGO","SAFRY","AIR","GD"]
 end_date = datetime.date.today().strftime('%Y-%m-%d')
-start_date = datetime.date(2024,11,22).strftime('%Y-%m-%d')
+start_date = datetime.date(2010,1,1).strftime('%Y-%m-%d')
 
 print("\n--- Download ---")
 
