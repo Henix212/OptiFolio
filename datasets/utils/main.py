@@ -7,9 +7,9 @@ output_dir = "datasets"
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(os.path.join(output_dir,"marketData"), exist_ok=True)
 
-tickers_list = ["AAPL","MSFT","GOOGL","AMZN","NVDA","TSLA","META","AVGO","JPM","V","WMT","HD","MC","OR","SIE","JNJ","SAFRY","AIR","BA","GD"]
-start_date = "2010-01-01"
+tickers_list = ["AAPL","MSFT","GOOGL","AMZN","NVDA","META","AVGO","SAFRY","AIR","GD"]
 end_date = datetime.date.today().strftime('%Y-%m-%d')
+start_date = datetime.date(2024,11,22).strftime('%Y-%m-%d')
 
 print("\n--- Download ---")
 
