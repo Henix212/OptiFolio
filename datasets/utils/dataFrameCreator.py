@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import os
+
 import matplotlib.pyplot as plt
 
 def simple_moving_average(series: pd.Series, window: int) -> pd.Series:
@@ -49,6 +51,9 @@ df_volume = pd.read_csv(
     index_col="Date",
     parse_dates=True
 )
+
+if not os.path.exists("./datasets/dataFrames"):
+    os.makedirs("./datasets/dataFrames")
 
 for col in df_volume.columns:
 
