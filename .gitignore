@@ -2,6 +2,7 @@
 .OptiFolioVenv
 datasets/marketData
 datasets/dataFrames
+test.py
 
 !datasets/utils
 !datasets/utils/downloadData.py
