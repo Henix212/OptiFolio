@@ -5,9 +5,9 @@ from gymnasium import spaces
 
 import os
 
-class optiFolioEnv(gym.Env):
+class OptiFolioEnv(gym.Env):
     def __init__(self, csv_folder: str, window_size: int = 20, initial_amount: float = 1000.0, transaction_fee: float = 0.001):
-        super(optiFolioEnv, self).__init__()
+        super(OptiFolioEnv, self).__init__()
         self.df = self.load_dataframes(os.path.normpath(csv_folder))
         self.window_size = window_size
         self.transaction_fee = transaction_fee
@@ -31,8 +31,6 @@ class optiFolioEnv(gym.Env):
             shape= (self.window_size, self.df.shape[1]),
             dtype= np.float32
         )
-
-        self.reset()
 
     def step(self, action):
         old_portfolio_value = self.portfolio_value
