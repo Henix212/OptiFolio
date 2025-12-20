@@ -1,2 +1,6 @@
+torch
 yfinance
 pandas
+matplotlib
+numpy
+gymnasium
