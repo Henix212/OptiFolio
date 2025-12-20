@@ -3,6 +3,7 @@
 datasets/marketData
 datasets/dataFrames
 test.py
+*__pycache__*
 
 !datasets/utils
 !datasets/utils/downloadData.py
