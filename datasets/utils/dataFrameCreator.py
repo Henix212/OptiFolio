@@ -40,46 +40,47 @@ def standar_deviation(series: pd.Series, window : int):
     series.rolling(window=window).std()
 
 
-df_close = pd.read_csv(
+def create_dataframe():
+    df_close = pd.read_csv(
     "datasets/marketData/adj_close_prices.csv",
     index_col="Date",
     parse_dates=True
-)
+    )
 
-df_volume = pd.read_csv(
-    "datasets/marketData/volume.csv",
-    index_col="Date",
-    parse_dates=True
-)
+    df_volume = pd.read_csv(
+        "datasets/marketData/volume.csv",
+        index_col="Date",
+        parse_dates=True
+    )
 
-if not os.path.exists("./datasets/dataFrames"):
-    os.makedirs("./datasets/dataFrames")
+    if not os.path.exists("./datasets/dataFrames"):
+        os.makedirs("./datasets/dataFrames")
 
-for col in df_volume.columns:
+    for col in df_volume.columns:
 
-    # === Adj_closes_prices Indicators === #
+        # === Adj_closes_prices Indicators === #
 
-    sma_close = simple_moving_average(df_close[col], 20)
-    ema_close = exponential_moving_average(df_close[col], 21)
-    rsi_close = relative_strong_index(df_close[col], 14)
-    macd_close = moving_average_convergence_divergence(df_close[col])
+        sma_close = simple_moving_average(df_close[col], 20)
+        ema_close = exponential_moving_average(df_close[col], 21)
+        rsi_close = relative_strong_index(df_close[col], 14)
+        macd_close = moving_average_convergence_divergence(df_close[col])
 
-    # === Volume Indicators === #
+        # === Volume Indicators === #
 
-    sma_volume = simple_moving_average(df_volume[col], 20)
-    ema_volume = exponential_moving_average(df_volume[col], 21)
-    std_volume = standar_deviation(df_volume[col], 20)
+        sma_volume = simple_moving_average(df_volume[col], 20)
+        ema_volume = exponential_moving_average(df_volume[col], 21)
+        std_volume = standar_deviation(df_volume[col], 20)
 
-    result_df = pd.DataFrame({
-        "Adj_Close": df_close[col],
-        "Volume" : df_volume[col],
-        "SMA_20": sma_close,
-        "EMA_21": ema_close,
-        "RSI_14": rsi_close,
-        "MACD_9": macd_close,
-        "SMA_20" : sma_volume,
-        "EMA_21" : ema_volume,
-        "STD_20" : std_volume
-    })
+        result_df = pd.DataFrame({
+            "Adj_Close": df_close[col],
+            "Volume" : df_volume[col],
+            "SMA_20": sma_close,
+            "EMA_21": ema_close,
+            "RSI_14": rsi_close,
+            "MACD_9": macd_close,
+            "SMA_20" : sma_volume,
+            "EMA_21" : ema_volume,
+            "STD_20" : std_volume
+        })
 
-    result_df.to_csv(f"./datasets/dataFrames/{col}.csv")
+        result_df.to_csv(f"./datasets/dataFrames/{col}.csv")
