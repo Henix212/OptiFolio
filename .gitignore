@@ -1,9 +1,0 @@
-.venv
-.OptiFolioVenv
-datasets/marketData
-datasets/dataFrames
-
-!datasets/utils
-!datasets/utils/downloadData.py
-!datasets/utils/dataFrameCreator.py
-
