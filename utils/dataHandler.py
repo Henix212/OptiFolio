@@ -74,7 +74,7 @@ def volumes_data(path: str) -> None:
         vols = df['Volume']
     else:
         vols = df.loc[:, df.columns.str.contains('Volume', case=False)]
-    _save_with_date(vols, 'data/cleaned/volumes/volumes.csv')
+    _save_with_date(vols, 'data/cleaned/prices/volumes.csv')
 
 
 def volatility_data(path: str, window: int = 21) -> None:
