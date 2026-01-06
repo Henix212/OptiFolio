@@ -18,12 +18,11 @@ def clean_data(path):
 def ensure_clean_dirs():
     """Create expected cleaned subfolders if they don't exist."""
     dirs = [
-        "data/raw/yahoo/"
+        "data/raw/yahoo/",
         "data/cleaned/volumes",
         "data/cleaned/returns",
         "data/cleaned/prices",
-        "data/cleaned/volatility",
-        "data/cleaned/macro",
+        "data/cleaned/macro"
     ]
     for d in dirs:
         os.makedirs(d, exist_ok=True)
@@ -76,19 +75,6 @@ def volumes_data(path: str) -> None:
         vols = df.loc[:, df.columns.str.contains('Volume', case=False)]
     _save_with_date(vols, 'data/cleaned/prices/volumes.csv')
 
-
-def volatility_data(path: str, window: int = 21) -> None:
-    """Compute rolling volatility (annualized) from returns and save it."""
-    df = load_yf_csv(path)
-    if isinstance(df.columns, pd.MultiIndex):
-        prices = df['Close']
-    else:
-        prices = df.loc[:, df.columns.str.contains('Close', case=False)]
-    rets = prices.pct_change().dropna()
-    vol = rets.rolling(window).std() * (252 ** 0.5)
-    _save_with_date(vol, 'data/cleaned/volatility/volatility.csv')
-
-
 def main(tickers_list) -> None:
     ensure_clean_dirs()
 
@@ -98,8 +84,6 @@ def main(tickers_list) -> None:
     volumes_data(path="data/raw/yahoo/yfin_data.csv")
     prices_data(path="data/raw/yahoo/yfin_data.csv")
     returns_data(path="data/raw/yahoo/yfin_data.csv")
-    volatility_data(path="data/raw/yahoo/yfin_data.csv")
-
 
 if __name__ == '__main__':
     main(tickers_list)
