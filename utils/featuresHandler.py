@@ -12,13 +12,13 @@ def ensure_clean_dirs():
         "data/features/",
         "data/features/volatility",
         "data/features/volatility/",
-        "data/features/returns/"
+        "data/features/returns/",
+        "data/features/regime"
     ]
     for d in dirs:
         os.makedirs(d, exist_ok=True)
 
 def ewma(df,decay):
-    
     
     vol = pd.DataFrame(index=df.index, columns=df.columns, dtype=float)
 
@@ -31,13 +31,18 @@ def ewma(df,decay):
 
     return vol * annualization
 
-def vol_zscore(short_vol,decay):
-    mu = ewma(df=short_vol,decay=decay)
-    sigma = ewma(df=(short_vol-mu)**2,decay=decay)
+def vol_zscore(df,decay):
+    mu = ewma(df=df,decay=decay)
+    sigma = ewma(df=(df-mu)**2,decay=decay)
 
-    zscore = (short_vol - mu) / sigma
+    zscore = (df - mu) / sigma
 
     return zscore
+
+def avrg_coor(df):
+    pass
+
+def 
 
 if __name__ == '__main__':
     ensure_clean_dirs()
@@ -51,11 +56,13 @@ if __name__ == '__main__':
 
     norm_return = returns / short_vol
 
-    zscore = vol_zscore(short_vol,0.97)
+    short_vol_zscore = vol_zscore(short_vol,0.97)
+
+    avrg_coor(returns)
 
     short_vol.to_csv("data/features/volatility/short_ratio.csv")
     long_vol.to_csv("data/features/volatility/long_ratio.csv")
     vol_ratio.to_csv("data/features/volatility/vol_ratio.csv")
-    zscore.to_csv("data/features/volatility/zscore.csv")
+    short_vol_zscore.to_csv("data/features/volatility/zscore.csv")
     norm_return.to_csv("data/features/returns/norm_returns.csv")
    
