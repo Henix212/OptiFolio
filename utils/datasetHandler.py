@@ -31,5 +31,3 @@ def create_dataset(path):
     combined_df.to_csv(output_path)
     
     return f"Dataset synchronisé créé : {output_path} ({len(combined_df)} lignes communes)"
-
-print(create_dataset("data/features"))
