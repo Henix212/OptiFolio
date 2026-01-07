@@ -6,7 +6,7 @@ tickers_list = ["^NDX","^FCHI","^GDAXI","^N225","^HSI","^SSMI"]
 
 def dl_market_data(tickers_list : list) -> None:
 
-    df = yf.download(tickers_list, period='5y')
+    df = yf.download(tickers_list, period='10y')
 
     df.to_csv("data/raw/yahoo/yfin_data.csv")
 
