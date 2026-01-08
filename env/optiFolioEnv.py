@@ -10,6 +10,7 @@ class optiFolioEnv(gym.Env):
 
         self.dataset = pd.read_csv(dataset_path)
         self.dataset.sort_index(inplace=True)
+        self.dataset.fillna(0, inplace=True)
 
         self.initial_amount = initial_amount
         self.lookback = lookback
@@ -21,10 +22,10 @@ class optiFolioEnv(gym.Env):
 
         self.return_cols = [col for col in self.dataset.columns if col.startswith("norm_returns_")]
         self.num_assets = len(self.return_cols)
-        self.num_features = self.dataset.shape[1] - 1  
+        self.num_features = self.dataset.shape[1] - 1
 
         self.observation_space = spaces.Box(
-            low=-np.inf, high=np.inf, shape=(self.lookback * self.num_features,), dtype=np.float32
+            low=-np.inf, high=np.inf, shape=(self.lookback * self.num_features + 1,), dtype=np.float32
         )
         self.action_space = spaces.Box(
             low=0, high=1, shape=(self.num_assets,), dtype=np.float32
@@ -35,11 +36,15 @@ class optiFolioEnv(gym.Env):
     def _get_observation(self):
         df_slice = self.dataset.iloc[self.current_step - self.lookback:self.current_step, 1:]
         obs = df_slice.values.astype(np.float32).flatten()
+
+        obs = np.append(obs, self.target_vol).astype(np.float32)
+
         return obs
 
     def step(self, action):
         weights = np.array(action, dtype=np.float32)
         weights = np.clip(weights, 0, 1)
+
         if weights.sum() > 0:
             weights /= weights.sum()
         else:
@@ -47,35 +52,48 @@ class optiFolioEnv(gym.Env):
 
         returns = self.dataset.iloc[self.current_step][self.return_cols].values.astype(np.float32)
         portfolio_return = np.dot(weights, returns)
-
+    
         self.recent_returns.append(portfolio_return)
         if len(self.recent_returns) > self.lookback:
             self.recent_returns.pop(0)
 
         portfolio_vol = np.std(self.recent_returns) if len(self.recent_returns) > 1 else 0.0
 
-        reward = np.log(1 + portfolio_return)  
+        reward = np.log(1 + portfolio_return)
         if portfolio_vol > self.target_vol:
             penalty = (portfolio_vol - self.target_vol)
-            reward -= penalty 
+            reward -= penalty
 
         self.portfolio_value *= (1 + portfolio_return)
 
         self.current_step += 1
         self.days_passed += 1
-        done = self.current_step >= len(self.dataset) or self.days_passed >= self.max_days
 
-        obs = self._get_observation() if not done else np.zeros(self.lookback * self.num_features, dtype=np.float32)
+        terminated = self.current_step >= len(self.dataset)        
+        truncated = self.days_passed >= self.max_days            
+        done = terminated or truncated
 
-        info = {"portfolio_value": self.portfolio_value, "weights": weights, "portfolio_vol": portfolio_vol}
+        obs = self._get_observation() if not done else np.zeros(self.lookback * self.num_features + 1, dtype=np.float32)
 
-        return obs, reward, done, info
+        info = {
+            "portfolio_value": self.portfolio_value,
+            "weights": weights,
+            "portfolio_vol": portfolio_vol
+        }
 
-    def reset(self):
+        return obs, reward, terminated, truncated, info
+
+
+    def reset(self, *, seed=None, options=None):
+        if seed is not None:
+            rd.seed(seed)
+
         self.current_step = rd.randint(self.lookback, len(self.dataset) - self.max_days - 1)
         self.days_passed = 0
         self.portfolio_value = self.initial_amount
         self.recent_returns = []
 
         obs = self._get_observation()
-        return obs, {"portfolio_value": self.portfolio_value}
+        info = {"portfolio_value": self.portfolio_value}
+
+        return obs, info
