@@ -4,3 +4,5 @@ numpy
 jupyterlab
 matplotlib
 gymnasium
+stable_baselines3
+tensorboard
