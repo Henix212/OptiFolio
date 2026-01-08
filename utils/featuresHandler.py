@@ -86,4 +86,3 @@ if __name__ == '__main__':
     short_corr.to_csv("data/features/correlation/short_corr.csv")
     long_corr.to_csv("data/features/correlation/long_corr.csv")
     corr_ratio.to_csv("data/features/correlation/corr_ratio.csv")    
-   
