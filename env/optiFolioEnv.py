@@ -62,6 +62,10 @@ class optiFolioEnv(gym.Env):
         # Store recent portfolio returns for volatility estimation
         self.recent_returns = []
 
+        # Used to calculate volatility
+        self.lambda_vol = 0.94
+        self.portfolio_var = 0.0
+
     def _get_observation(self):
         """
         Build the observation vector using a rolling lookback window
@@ -104,10 +108,13 @@ class optiFolioEnv(gym.Env):
         if len(self.recent_returns) > self.lookback:
             self.recent_returns.pop(0)
 
-        # Compute rolling portfolio volatility
-        portfolio_vol = (
-            np.std(self.recent_returns) if len(self.recent_returns) > 1 else 0.0
+        # Compute EWMA portfolio volatility
+        self.portfolio_var = (
+            self.lambda_vol * self.portfolio_var +
+            (1 - self.lambda_vol) * portfolio_return**2
         )
+
+        portfolio_vol = np.sqrt(self.portfolio_var) * np.sqrt(252)
 
         # Reward: log return penalized by excess volatility
         reward = np.log(1 + portfolio_return)
