@@ -10,7 +10,7 @@ def dl_market_data(tickers_list: list) -> None:
     Download historical market data from Yahoo Finance
     and save it as a raw CSV file.
     """
-    df = yf.download(tickers_list, period='10y')
+    df = yf.download(tickers_list, period='max')
     df.to_csv("data/raw/yahoo/yfin_data.csv")
 
 
