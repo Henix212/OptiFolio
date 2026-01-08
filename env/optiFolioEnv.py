@@ -10,7 +10,7 @@ class optiFolioEnv(gym.Env):
         dataset_path,
         initial_amount=10_000,
         lookback=20,
-        max_days=252,
+        max_days=31,
         target_vol=0.02
     ):
         """
@@ -116,11 +116,10 @@ class optiFolioEnv(gym.Env):
 
         portfolio_vol = np.sqrt(self.portfolio_var) * np.sqrt(252)
 
-        # Reward: log return penalized by excess volatility
-        reward = np.log(1 + portfolio_return)
-        if portfolio_vol > self.target_vol:
-            penalty = portfolio_vol - self.target_vol
-            reward -= penalty
+        # Reward: return penalized by excess volatility
+        alpha = 2.0 
+        excess_vol = max(0.0, portfolio_vol - self.target_vol)
+        reward = portfolio_return - alpha * excess_vol
 
         # Update portfolio value
         self.portfolio_value *= (1 + portfolio_return)
