@@ -1,5 +1,9 @@
 # OptiFolio
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Henix212%2FCerberus-red)](https://github.com/Henix212/OptiFolio.git)
+
+
 **Version 1.0**
 
 OptiFolio is a portfolio optimization system based on Reinforcement Learning using the PPO (Proximal Policy Optimization) algorithm. The project enables training an intelligent agent to manage a portfolio of financial assets by optimizing returns while controlling target volatility.
