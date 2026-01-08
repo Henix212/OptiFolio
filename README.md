@@ -2,218 +2,218 @@
 
 **Version 1.0**
 
-OptiFolio est un système d'optimisation de portefeuille basé sur l'apprentissage par renforcement (Reinforcement Learning) utilisant l'algorithme PPO (Proximal Policy Optimization). Le projet permet d'entraîner un agent intelligent à gérer un portefeuille d'actifs financiers en optimisant les rendements tout en contrôlant la volatilité cible.
+OptiFolio is a portfolio optimization system based on Reinforcement Learning using the PPO (Proximal Policy Optimization) algorithm. The project enables training an intelligent agent to manage a portfolio of financial assets by optimizing returns while controlling target volatility.
 
-## 📋 Table des matières
+## 📋 Table of Contents
 
-- [Fonctionnalités](#-fonctionnalités)
+- [Features](#-features)
 - [Architecture](#-architecture)
 - [Installation](#-installation)
-- [Utilisation](#-utilisation)
-- [Structure du projet](#-structure-du-projet)
-- [Pipeline de données](#-pipeline-de-données)
-- [Environnement d'entraînement](#-environnement-dentraînement)
-- [Technologies utilisées](#-technologies-utilisées)
-- [Auteur](#-auteur)
+- [Usage](#-usage)
+- [Project Structure](#-project-structure)
+- [Data Pipeline](#-data-pipeline)
+- [Training Environment](#-training-environment)
+- [Technologies Used](#-technologies-used)
+- [Author](#-author)
 
-## ✨ Fonctionnalités
+## ✨ Features
 
-- **Téléchargement automatique** de données de marché depuis Yahoo Finance
-- **Nettoyage et préparation** des données financières (prix, volumes, rendements)
-- **Extraction de features** avancées :
-  - Volatilité EWMA (court et long terme)
-  - Corrélations moyennes entre actifs
-  - Rendements normalisés
-- **Environnement d'apprentissage par renforcement** personnalisé (Gymnasium)
-- **Entraînement PPO** avec contrôle de la volatilité cible
-- **Visualisation** des données et des features
-- **Suivi des performances** via TensorBoard
+- **Automatic download** of market data from Yahoo Finance
+- **Data cleaning and preparation** of financial data (prices, volumes, returns)
+- **Advanced feature extraction** :
+  - EWMA volatility (short and long term)
+  - Average correlations between assets
+  - Normalized returns
+- **Custom Reinforcement Learning environment** (Gymnasium)
+- **PPO training** with target volatility control
+- **Data and feature visualization**
+- **Performance tracking** via TensorBoard
 
 ## 🏗️ Architecture
 
-Le projet suit une architecture modulaire organisée en plusieurs composants :
+The project follows a modular architecture organized into several components:
 
-1. **Gestion des données** (`utils/dataHandler.py`) : Téléchargement et nettoyage des données brutes
-2. **Extraction de features** (`utils/featuresHandler.py`) : Calcul de métriques financières avancées
-3. **Création du dataset** (`utils/datasetHandler.py`) : Agrégation des features en un dataset unifié
-4. **Environnement RL** (`env/optiFolioEnv.py`) : Environnement Gymnasium personnalisé pour l'entraînement
-5. **Entraînement** (`main.ipynb`) : Script principal d'entraînement de l'agent PPO
+1. **Data management** (`utils/dataHandler.py`) : Download and cleaning of raw data
+2. **Feature extraction** (`utils/featuresHandler.py`) : Calculation of advanced financial metrics
+3. **Dataset creation** (`utils/datasetHandler.py`) : Aggregation of features into a unified dataset
+4. **RL environment** (`env/optiFolioEnv.py`) : Custom Gymnasium environment for training
+5. **Training** (`main.ipynb`) : Main PPO agent training script
 
 ## 🚀 Installation
 
-### Prérequis
+### Prerequisites
 
-- Python 3.8 ou supérieur
-- pip ou conda
+- Python 3.8 or higher
+- pip or conda
 
-### Installation des dépendances
+### Installing Dependencies
 
 ```bash
-# Cloner le repository (si applicable)
+# Clone the repository (if applicable)
 git clone <repository-url>
 cd OptiFolio
 
-# Installer les dépendances
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Dépendances principales
+### Main Dependencies
 
-- `yfinance` : Téléchargement de données financières
-- `pandas` : Manipulation de données
-- `numpy` : Calculs numériques
-- `gymnasium` : Framework d'environnements RL
-- `stable_baselines3` : Implémentation PPO
-- `tensorboard` : Visualisation des métriques d'entraînement
-- `matplotlib` : Visualisation de données
-- `jupyterlab` : Environnement de développement interactif
+- `yfinance` : Financial data download
+- `pandas` : Data manipulation
+- `numpy` : Numerical computations
+- `gymnasium` : RL environment framework
+- `stable_baselines3` : PPO implementation
+- `tensorboard` : Training metrics visualization
+- `matplotlib` : Data visualization
+- `jupyterlab` : Interactive development environment
 
-## 📖 Utilisation
+## 📖 Usage
 
-### 1. Préparation des données
+### 1. Data Preparation
 
-#### Étape 1 : Téléchargement et nettoyage des données brutes
+#### Step 1: Download and clean raw data
 
 ```python
 from utils.dataHandler import main, tickers_list
 
-# Télécharge les données de marché et génère les fichiers nettoyés
+# Downloads market data and generates cleaned files
 main(tickers_list)
 ```
 
-Les indices boursiers téléchargés par défaut sont :
+The default stock indices downloaded are:
 - `^NDX` : NASDAQ-100
 - `^FCHI` : CAC 40
 - `^GDAXI` : DAX
 - `^N225` : Nikkei 225
 - `^HSI` : Hang Seng
-- `^SSMI` : SMI Suisse
+- `^SSMI` : Swiss SMI
 
-#### Étape 2 : Extraction des features
+#### Step 2: Feature extraction
 
 ```python
 from utils.featuresHandler import *
 
-# Calcule les features financières (volatilité, corrélations, etc.)
-# Le script s'exécute automatiquement si appelé directement
+# Calculates financial features (volatility, correlations, etc.)
+# The script runs automatically if called directly
 ```
 
-#### Étape 3 : Création du dataset final
+#### Step 3: Create final dataset
 
 ```python
 from utils.datasetHandler import create_dataset
 
-# Combine toutes les features en un dataset synchronisé
+# Combines all features into a synchronized dataset
 create_dataset("data/features")
 ```
 
-### 2. Entraînement de l'agent
+### 2. Agent Training
 
-Ouvrez `main.ipynb` dans JupyterLab et exécutez les cellules pour :
+Open `main.ipynb` in JupyterLab and execute the cells to:
 
-1. Charger le dataset préparé
-2. Initialiser l'environnement `optiFolioEnv`
-3. Entraîner l'agent PPO
-4. Visualiser les résultats via TensorBoard
+1. Load the prepared dataset
+2. Initialize the `optiFolioEnv` environment
+3. Train the PPO agent
+4. Visualize results via TensorBoard
 
-### 3. Visualisation
+### 3. Visualization
 
-Les notebooks dans le dossier `notebook/` permettent de visualiser :
-- Les données brutes et nettoyées (`dataVisualization.ipynb`)
-- Les features extraites (`featureVisualization.ipynb`)
+The notebooks in the `notebook/` folder allow visualization of:
+- Raw and cleaned data (`dataVisualization.ipynb`)
+- Extracted features (`featureVisualization.ipynb`)
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
 ```
 OptiFolio/
 ├── data/
-│   ├── raw/              # Données brutes téléchargées
+│   ├── raw/              # Downloaded raw data
 │   │   └── yahoo/
-│   ├── cleaned/          # Données nettoyées (prix, volumes, rendements)
-│   ├── features/         # Features calculées (volatilité, corrélations)
-│   └── dataset/          # Dataset final combiné
+│   ├── cleaned/          # Cleaned data (prices, volumes, returns)
+│   ├── features/         # Calculated features (volatility, correlations)
+│   └── dataset/          # Final combined dataset
 ├── env/
-│   └── optiFolioEnv.py   # Environnement Gymnasium personnalisé
+│   └── optiFolioEnv.py   # Custom Gymnasium environment
 ├── utils/
-│   ├── dataHandler.py    # Gestion des données brutes
-│   ├── featuresHandler.py # Extraction de features
-│   └── datasetHandler.py  # Création du dataset final
+│   ├── dataHandler.py    # Raw data management
+│   ├── featuresHandler.py # Feature extraction
+│   └── datasetHandler.py  # Final dataset creation
 ├── notebook/
 │   ├── dataVisualization.ipynb
 │   └── featureVisualization.ipynb
-├── ppo_tensorboard/      # Logs TensorBoard de l'entraînement
-├── main.ipynb            # Script principal d'entraînement
-├── requirements.txt      # Dépendances Python
+├── ppo_tensorboard/      # TensorBoard training logs
+├── main.ipynb            # Main training script
+├── requirements.txt      # Python dependencies
 └── README.md             # Documentation
 ```
 
-## 🔄 Pipeline de données
+## 🔄 Data Pipeline
 
-Le pipeline de traitement des données suit ces étapes :
+The data processing pipeline follows these steps:
 
-1. **Téléchargement** : Récupération des données historiques depuis Yahoo Finance
-2. **Nettoyage** : Extraction des prix de clôture, volumes et calcul des rendements
+1. **Download** : Retrieval of historical data from Yahoo Finance
+2. **Cleaning** : Extraction of closing prices, volumes and calculation of returns
 3. **Feature Engineering** :
-   - Volatilité EWMA (λ court = 0.94, λ long = 0.97)
-   - Ratio de volatilité (court/long terme)
-   - Corrélations moyennes EWMA
-   - Rendements normalisés par volatilité
-4. **Agrégation** : Synchronisation de toutes les features sur des dates communes
-5. **Dataset final** : Création d'un fichier CSV unifié pour l'entraînement
+   - EWMA volatility (short λ = 0.94, long λ = 0.97)
+   - Volatility ratio (short/long term)
+   - EWMA average correlations
+   - Volatility-normalized returns
+4. **Aggregation** : Synchronization of all features on common dates
+5. **Final dataset** : Creation of a unified CSV file for training
 
-## 🎮 Environnement d'entraînement
+## 🎮 Training Environment
 
-L'environnement `optiFolioEnv` est configuré avec les paramètres suivants :
+The `optiFolioEnv` environment is configured with the following parameters:
 
-- **Capital initial** : 10 000 (par défaut)
-- **Fenêtre de lookback** : 20 jours
-- **Durée maximale** : 252 jours (1 année de trading)
-- **Volatilité cible** : 2% (par défaut)
+- **Initial capital** : 10,000 (default)
+- **Lookback window** : 20 days
+- **Maximum duration** : 252 days (1 trading year)
+- **Target volatility** : 2% (default)
 
-### Fonction de récompense
+### Reward Function
 
-La récompense combine plusieurs composantes :
+The reward combines several components:
 
-- **Rendement logarithmique** : Récompense basée sur le rendement du portefeuille
-- **Bonus alpha** : Bonus pour les trades performants
-- **Pénalité de volatilité** : Pénalité si la volatilité dépasse la cible
-- **Pénalité de turnover** : Décourage les réallocations excessives
+- **Logarithmic return** : Reward based on portfolio return
+- **Alpha bonus** : Bonus for profitable trades
+- **Volatility penalty** : Penalty if volatility exceeds target
+- **Turnover penalty** : Discourages excessive reallocations
 
-### Espace d'observation
+### Observation Space
 
-- Fenêtre glissante des features sur les N derniers jours
-- Volatilité cible comme feature supplémentaire
+- Sliding window of features over the last N days
+- Target volatility as an additional feature
 
-### Espace d'action
+### Action Space
 
-- Poids de portefeuille pour chaque actif (normalisés via softmax)
+- Portfolio weights for each asset (normalized via softmax)
 
-## 🛠️ Technologies utilisées
+## 🛠️ Technologies Used
 
-- **Python** : Langage de programmation principal
-- **Yahoo Finance API** : Source de données de marché
-- **Gymnasium** : Standard pour les environnements RL
-- **Stable-Baselines3** : Bibliothèque d'algorithmes RL
-- **TensorBoard** : Outil de visualisation des métriques
-- **Pandas/NumPy** : Manipulation et calculs sur les données
+- **Python** : Main programming language
+- **Yahoo Finance API** : Market data source
+- **Gymnasium** : Standard for RL environments
+- **Stable-Baselines3** : RL algorithms library
+- **TensorBoard** : Metrics visualization tool
+- **Pandas/NumPy** : Data manipulation and computations
 
-## 📊 Métriques et suivi
+## 📊 Metrics and Monitoring
 
-Les métriques d'entraînement sont enregistrées dans `ppo_tensorboard/` et peuvent être visualisées avec :
+Training metrics are recorded in `ppo_tensorboard/` and can be visualized with:
 
 ```bash
 tensorboard --logdir=ppo_tensorboard
 ```
 
-## 🔧 Configuration avancée
+## 🔧 Advanced Configuration
 
-### Personnalisation des indices
+### Customizing Indices
 
-Modifiez la liste `tickers_list` dans `utils/dataHandler.py` pour ajouter ou retirer des indices.
+Modify the `tickers_list` in `utils/dataHandler.py` to add or remove indices.
 
-### Paramètres de l'environnement
+### Environment Parameters
 
-Les paramètres de l'environnement peuvent être ajustés lors de l'initialisation :
+Environment parameters can be adjusted during initialization:
 
 ```python
 env = optiFolioEnv(
@@ -225,33 +225,33 @@ env = optiFolioEnv(
 )
 ```
 
-### Paramètres EWMA
+### EWMA Parameters
 
-Les facteurs de décroissance pour les calculs EWMA peuvent être modifiés dans `utils/featuresHandler.py` :
-- `lambda_short = 0.94` (court terme)
-- `lambda_long = 0.97` (long terme)
+The decay factors for EWMA calculations can be modified in `utils/featuresHandler.py`:
+- `lambda_short = 0.94` (short term)
+- `lambda_long = 0.97` (long term)
 
-## ⚠️ Avertissements
+## ⚠️ Warnings
 
-- Ce projet est à des fins éducatives et de recherche
-- Les performances passées ne garantissent pas les résultats futurs
-- Toujours effectuer des tests approfondis avant toute utilisation en production
-- Les données de marché peuvent contenir des erreurs ou des lacunes
+- This project is for educational and research purposes
+- Past performance does not guarantee future results
+- Always perform thorough testing before any production use
+- Market data may contain errors or gaps
 
-## 📝 Notes de version
+## 📝 Version Notes
 
 ### Version 1.0
 
-- Implémentation initiale du pipeline de données
-- Environnement RL personnalisé avec PPO
-- Extraction de features financières avancées
-- Support de multiples indices boursiers
-- Visualisation via TensorBoard
+- Initial implementation of data pipeline
+- Custom RL environment with PPO
+- Advanced financial feature extraction
+- Support for multiple stock indices
+- Visualization via TensorBoard
 
-## 👤 Auteur
+## 👤 Author
 
-Développé dans le cadre d'un projet d'optimisation de portefeuille.
+Developed as part of a portfolio optimization project.
 
 ---
 
-**License** : Ce projet est fourni tel quel, sans garantie d'aucune sorte.
+**License** : This project is provided as-is, without any warranty.
