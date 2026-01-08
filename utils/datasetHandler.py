@@ -48,3 +48,6 @@ def create_dataset(path):
     combined_df.to_csv(output_path)
     
     return f"Synchronized dataset created: {output_path} ({len(combined_df)} common rows)"
+
+if __name__ == '__main__':
+    create_dataset("data/features")
