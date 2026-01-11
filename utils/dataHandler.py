@@ -40,10 +40,10 @@ sorted_volatility = volatility.sort_values(ascending=False)
 print("\nAnnual Volatility :")
 print(sorted_volatility)
 
-calculate_and_save_indicators(raw_data, combined_stock_list)
-
 raw_data.to_csv("raw_data/raw_data.csv")
 returns.to_csv("data/returns/data_returns.csv")
 volatility.to_csv("data/volatility/data_volatility.csv")
 gspc_df.to_csv("data/macro/gspc.csv")
 vix_df.to_csv("data/macro/vix.csv")
+
+calculate_and_save_indicators(raw_data, combined_stock_list)
