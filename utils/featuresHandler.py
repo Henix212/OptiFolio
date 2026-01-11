@@ -1,6 +1,8 @@
 import talib as ta
 import numpy as np
 import pandas as pd
+import datetime as dt
+import yfinance as yf
 import os
 
 def calculate_and_save_indicators(df, tickers, output_dir="data/indicators"):
@@ -60,3 +62,65 @@ def calculate_and_save_indicators(df, tickers, output_dir="data/indicators"):
         file_path = f"{output_dir}/{name}.csv"
         indicator_df.to_csv(file_path)
     
+    normalize_indicators("data/indicators",indicator_names)
+    for macro in ["vix",'gspc']:
+        df = pd.read_csv(f"data/macro/{macro}.csv")
+
+        df = df[df.iloc[:, 0] != "Ticker"]
+        close = pd.to_numeric(df["Close"], errors="coerce").values
+
+        normalize_macro_data = normalize_macro(close)
+
+        macro_df = pd.DataFrame(normalize_macro_data, index=df.index) 
+
+        macro_df.to_csv(f"data/macro/{macro}.csv")
+    
+def handle_nans(indicators : pd.DataFrame, fill_value = 0):
+    return indicators.fillna(value=fill_value)
+
+def normalize_indicators(indicators_path, indicators_name):
+    for name in indicators_name:
+        df = pd.read_csv(
+            f"{indicators_path}/{name}.csv",
+            index_col=0
+        ).astype(float)
+
+        df = handle_nans(df)
+
+        indicators = df.to_numpy()
+
+        if indicators.ndim == 1:
+            indicators = indicators.reshape(-1, 1)
+
+        min_val = np.min(indicators, axis=0, keepdims=True)
+        max_val = np.max(indicators, axis=0, keepdims=True)
+
+        epsilon = 1e-8
+        normalized = (indicators - min_val) / (max_val - min_val + epsilon)
+
+        normalized_df = pd.DataFrame(
+            normalized,
+            index=df.index,
+            columns=df.columns
+        )
+
+        normalized_df.to_csv(f"{indicators_path}/{name}.csv")
+
+def normalize_macro(indicators):
+    indicators = handle_macro_nans(indicators)  
+    if indicators.ndim == 1:
+        indicators = indicators.reshape(-1, 1) 
+
+    min_val = np.min(indicators, axis=0, keepdims=True)
+    max_val = np.max(indicators, axis=0, keepdims=True)
+
+    epsilon = 1e-8
+    normalized = (indicators - min_val) / (max_val - min_val + epsilon)
+    
+    return normalized
+
+def handle_macro_nans(indicators, fill_value=0):
+    inds_nan = np.isnan(indicators)
+    if inds_nan.any():
+        indicators = np.where(inds_nan, fill_value, indicators)
+    return indicators
