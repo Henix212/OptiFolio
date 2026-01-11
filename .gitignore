@@ -1,0 +1,6 @@
+.venv
+raw_data
+data 
+dataset
+*__pycache__*
+*ppo_tensorboard*
