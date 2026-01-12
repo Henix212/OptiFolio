@@ -11,6 +11,7 @@ os.makedirs("data/returns", exist_ok=True)
 os.makedirs("data/volatility", exist_ok=True)
 os.makedirs("data/macro", exist_ok=True)
 os.makedirs("data/indicators", exist_ok=True) 
+os.makedirs("data/dataset", exist_ok=True) 
 
 start_date = dt.date.today() - dt.timedelta(days=365*10)
 end_date = dt.date.today()
