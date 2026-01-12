@@ -7,3 +7,4 @@ gymnasium
 stable_baselines3
 tensorboard
 ta-lib
+scipy
