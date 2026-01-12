@@ -41,7 +41,9 @@ print("\nAnnual Volatility :")
 print(sorted_volatility)
 
 raw_data.to_csv("raw_data/raw_data.csv")
+returns.index.name = "Date"
 returns.to_csv("data/returns/data_returns.csv")
+volatility.index.name = "Tickers"
 volatility.to_csv("data/volatility/data_volatility.csv")
 gspc_df.to_csv("data/macro/gspc.csv")
 vix_df.to_csv("data/macro/vix.csv")

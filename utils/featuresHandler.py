@@ -60,18 +60,25 @@ def calculate_and_save_indicators(df, tickers, output_dir="data/indicators"):
         indicator_df = pd.DataFrame(data_dict, index=df.index)
         
         file_path = f"{output_dir}/{name}.csv"
+        indicator_df.index.name = "Date"
         indicator_df.to_csv(file_path)
     
     normalize_indicators("data/indicators",indicator_names)
-    for macro in ["vix",'gspc']:
+    for macro in ["vix", "gspc"]:
         df = pd.read_csv(f"data/macro/{macro}.csv")
 
         df = df[df.iloc[:, 0] != "Ticker"]
-        close = pd.to_numeric(df["Close"], errors="coerce").values
 
+        df = df.rename(columns={"Price": "Date"}) # Fix yahoo finance problem
+
+        df.iloc[:, 0] = pd.to_datetime(df.iloc[:, 0])
+
+        df = df.set_index(df.columns[0])
+
+        close = pd.to_numeric(df["Close"], errors="coerce").values
         normalize_macro_data = normalize_macro(close)
 
-        macro_df = pd.DataFrame(normalize_macro_data, index=df.index) 
+        macro_df = pd.DataFrame(normalize_macro_data, index=df.index, columns=["Close"])
 
         macro_df.to_csv(f"data/macro/{macro}.csv")
     
