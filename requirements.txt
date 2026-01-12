@@ -8,3 +8,4 @@ stable_baselines3
 tensorboard
 ta-lib
 scipy
+scikit-learn
