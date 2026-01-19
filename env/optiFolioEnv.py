@@ -45,7 +45,7 @@ class OptiFolioEnv(gym.Env):
         
         new_portfolio_value = self.portfolio_value * (1 + portfolio_return)
 
-        reward = np.log(new_portfolio_value / self.portfolio_value)
+        reward = (new_portfolio_value - self.portfolio_value) / self.portfolio_value
         
         self.portfolio_value = new_portfolio_value
         self.current_step += 1
